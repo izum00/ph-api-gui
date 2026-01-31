@@ -32,11 +32,19 @@ def m3u8_to_video():
     cmd = [
         FFMPEG_PATH,
         "-y",
+    
+        "-protocol_whitelist",
+        "file,http,https,tcp,tls,crypto",
+    
+        "-allowed_extensions", "ALL",
+    
         "-i", m3u8_url,
+    
         "-movflags", "frag_keyframe+empty_moov",
         "-c:v", "libx264",
         "-preset", "veryfast",
         "-c:a", "aac",
+    
         "-f", "mp4",
         "pipe:1"
     ]
