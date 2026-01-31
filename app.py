@@ -31,12 +31,16 @@ def m3u8_to_video():
     # 解析は m3u8、変換は ffmpeg という役割分担
     cmd = [
         FFMPEG_PATH,
-        "-loglevel", "error",
+        "-y",
         "-i", m3u8_url,
-        "-c", "copy",
+        "-movflags", "frag_keyframe+empty_moov",
+        "-c:v", "libx264",
+        "-preset", "veryfast",
+        "-c:a", "aac",
         "-f", "mp4",
         "pipe:1"
     ]
+
 
     proc = subprocess.run(
         cmd,
