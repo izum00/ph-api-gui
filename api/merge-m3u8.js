@@ -5,6 +5,8 @@ import fs from "fs";
 import { tmpdir } from "os";
 import { join } from "path";
 import { promisify } from "util";
+import ffmpegPath from "ffmpeg-static";
+ffmpeg.setFfmpegPath(ffmpegPath);
 
 const writeFile = promisify(fs.writeFile);
 const unlink = promisify(fs.unlink);
