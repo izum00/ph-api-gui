@@ -2,9 +2,9 @@ from flask import Flask, request, jsonify
 import subprocess
 import base64
 import imageio_ffmpeg
+import os
 
 app = Flask(__name__)
-
 FFMPEG_PATH = imageio_ffmpeg.get_ffmpeg_exe()
 
 @app.route("/m3u8-to-video", methods=["POST"])
@@ -41,3 +41,9 @@ def m3u8_to_video():
     )
 
     return jsonify({"dataUrl": data_url})
+
+
+# ★ これが無いと Render では即死します
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
