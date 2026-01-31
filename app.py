@@ -1,12 +1,12 @@
 from flask import Flask, request, jsonify
-from api_api import Api
+from pornhub_api import PornhubApi
 import yt_dlp
 import base64
 import tempfile
 import os
 
 app = Flask(__name__)
-api = Api()
+api = PornhubApi()
 
 # 🔍 動画検索
 @app.route("/search", methods=["GET"])
