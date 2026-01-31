@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>M3U8 Merge Demo</title>
+</head>
+<body>
+  <h1>M3U8 Merge Demo</h1>
+  <textarea id="urls" rows="5" cols="50" placeholder="Enter M3U8 URLs, one per line"></textarea>
+  <br>
+  <button id="mergeBtn">Merge & Convert</button>
+  <br><br>
+  <video id="video" controls width="480"></video>
+
+  <script>
+    document.getElementById('mergeBtn').addEventListener('click', async () => {
+      const urls = document.getElementById('urls').value
+        .split('\n')
+        .map(u => u.trim())
+        .filter(u => u);
+
+      const res = await fetch('/api/merge-m3u8', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ urls })
+      });
+      const data = await res.json();
+      if (data.dataUrl) {
+        document.getElementById('video').src = data.dataUrl;
+      } else {
+        alert(data.error || 'Error occurred');
+      }
+    });
+  </script>
+</body>
+</html>
