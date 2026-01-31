@@ -3,6 +3,8 @@ import subprocess
 import base64
 import imageio_ffmpeg
 import os
+import m3u8
+import tempfile
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -17,6 +19,16 @@ def m3u8_to_video():
     if not m3u8_url:
         return jsonify({"error": "m3u8_url is required"}), 400
 
+    try:
+        playlist = m3u8.load(m3u8_url)
+    except Exception as e:
+        return jsonify({"error": "failed to load m3u8", "detail": str(e)}), 400
+
+    if not playlist.segments:
+        return jsonify({"error": "no segments found"}), 400
+
+    # ffmpeg は m3u8 を直接食えるので、
+    # 解析は m3u8、変換は ffmpeg という役割分担
     cmd = [
         FFMPEG_PATH,
         "-loglevel", "error",
@@ -46,7 +58,7 @@ def m3u8_to_video():
     return jsonify({"dataUrl": data_url})
 
 
-# ★ これが無いと Render では即死します
+# Render 用
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
