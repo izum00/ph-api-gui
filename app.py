@@ -3,8 +3,11 @@ import subprocess
 import base64
 import imageio_ffmpeg
 import os
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
+
 FFMPEG_PATH = imageio_ffmpeg.get_ffmpeg_exe()
 
 @app.route("/m3u8-to-video", methods=["POST"])
